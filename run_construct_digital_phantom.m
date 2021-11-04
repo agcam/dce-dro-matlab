@@ -23,16 +23,16 @@ function run_construct_digital_phantom()
   
     % -- START SET-UP -----------------------------------------------------
 
-    config.STUDY          = 'EXAMPLES';
+    config.STUDY          = 'EXAMPLES';  % Generic name for study/project...
     
-    config.TEST_FLAG      = true; %false;  % Gives more debug information if set...
+    config.TEST_FLAG      = true;   % Gives more debug information if set...
 
     config.WRITE_OUTPUT   = true;   % Disable any writing of files if this is set 'false'...
    
     % Paths to writing location | input location, respectively...
 
-    config.BASE_OUT_PATH  = '.\output\EXAMPLES\TM_examp';
-    config.WORK_PATH      = '.\work\vp_setup';
+    config.BASE_PATH  = '.\output';
+    config.WORK_PATH  = '.\work';
 
     % Name your phantom: suggest 'model + an ID'...
     config.PHANTOM_ID     = 'TM_examp_001_01';
@@ -40,17 +40,53 @@ function run_construct_digital_phantom()
     % Kinetic model to be used...
     config.MODEL          = 'TM';    %  TM | eTM | TU | 2CXM | PLK (Patlak) | ...
 
-    % ...and check: 'phantom_config_all_<STUDY>.m'   % General study parameters
+    % ...and check: 'phantom_config_all_<STUDY>.m'   
+    
+                % This specifies general study configuration parameters...
+                % (See e.g. '.\config\phantom_config_all_examples.m' as an
+                % example)
 
-    % ...and write: 'phantom_config_<PHANTOM_ID>.m'  % Phantom specific parameters
+    % ...and write: 'phantom_config_<PHANTOM_ID>.m'  
+    
+                % This specifies phantom-specific configuration parameters...
+                % (see e.g. '.\config\phantom_config_TM_examp_001_01.m' as 
+                % an example)
 
-    % ...and write: 'model_apply_<MODEL>.m'          % This specifies how to apply the model (if not aleady written)
+    % ...and write: 'model_apply_<MODEL>.m'       
+    
+                % ... if not already written...
+                
+                % This specifies how to apply the model, in residue function format...
+                % (see e.g. 'model_apply_TM.m' as an example)
+                
+                % N.B. If adding a new model implementation, also add relevant code
+                % to the switch statements on line 216 of 'run_construct_digital_phantom.m'
+                % and on line 16 of 'dce_calc_gd_curves_from_model.m'.
 
+    % Two further comma-separated variable 'spreadsheet' files must be
+    % suppled:-
+    
+    % .\aif\<AIF-FILE>.csv    % Contains 't (seconds), [Gd] (mM)' pairs (as a
+                              % blood concentration) to specify the arterial
+                              % input function (AIF) curve to use in phantom
+                              % generation...
+                              % (see e.g. '.\aif\qiba_aif_5-4_zero_offset.csv' as
+                              % an example)
+                              
+    % .\config\<PARAMETER-VALUE-FILE>.csv
+    
+                              % An input file of kinetic model parameter values 
+                              % to be used in phantom generation...
+                              % (see e.g. '.\config\param_values_TM_examp_01.csv' 
+                              % as an example)
+                              
     % -- END SET-UP -------------------------------------------------------
 
 
     % -- DERIVED PARAMETERS IN COMMON --------------------------------------------------
-
+    
+    config.BASE_OUT_PATH = fullfile(config.BASE_PATH, config.STUDY);
+    
     % Retrieve common configuration parameters...
     addpath('.\config');
     
