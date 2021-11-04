@@ -4,7 +4,7 @@
 
     Date   : 02-Nov-2021
     Author : A. B. Gill, PhD  [Radiology, University of Cambridge, UK]
-    Version: 3.0
+    Version: 1.01
 
     [Written and tested under MATLAB R2019b]
 
@@ -27,12 +27,12 @@ function run_construct_digital_phantom()
     
     config.TEST_FLAG      = true; %false;  % Gives more debug information if set...
 
-    config.WRITE_OUTPUT   = false;%true;   % Disable any writing of files if this is set 'false'...
+    config.WRITE_OUTPUT   = true;   % Disable any writing of files if this is set 'false'...
    
     % Paths to writing location | input location, respectively...
 
-    config.BASE_OUT_PATH  = 'C:\Users\abg28\ANON_DICOM_DATA\CURRENT\ANON_DRO_PAPER\EXAMPLES\TM_examp';
-    config.WORK_PATH      = 'C:\Users\abg28\ANON_DICOM_DATA\CURRENT\ANON_DRO_PAPER\vp_setup';
+    config.BASE_OUT_PATH  = '.\output\EXAMPLES\TM_examp';
+    config.WORK_PATH      = '.\work\vp_setup';
 
     % Name your phantom: suggest 'model + an ID'...
     config.PHANTOM_ID     = 'TM_examp_001_01';
@@ -90,6 +90,8 @@ function run_construct_digital_phantom()
     
     if ~exist(fullfile(config.BASE_OUT_PATH, config.PHANTOM_ID), 'dir'), ...
             mkdir(fullfile(config.BASE_OUT_PATH, config.PHANTOM_ID)); end
+    if ~exist(config.WORK_PATH, 'dir'), ...
+            mkdir(config.WORK_PATH); end
     
     diary(config.LOG_FILE);
     diary('on');
