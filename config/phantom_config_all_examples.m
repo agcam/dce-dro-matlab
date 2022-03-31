@@ -56,8 +56,10 @@ function config = phantom_config_all_examples(config)
     config.AUC_INTERVAL  = 90.0;     % In seconds e.g. set to 90 seconds for 'iaugc90' 
    
     config.Y_AIF         = 20;       % Height in pixels of AIF region appended to lower extent of dynamic images
-    config.BLOOD_R10     = 1e6 / 1440.0; 
-                                     % Fixed value: used to convert blood curve to signal... [1.0E+6 / ms]
+    config.BLOOD_T10     = 1664.0;   % Value at 3 T from Lu H et al. Magn Reson Med. 2004 Sep;52(3):679-82. doi: 10.1002/mrm.20178. PMID: 15334591.
+    config.BLOOD_R10     = 1e6 / config.BLOOD_T10; 
+                                     % Fixed value at 3 T: used to convert blood curve to signal... [1.0E+6 / ms] :
+                                     
     config.BLOOD_B1      = 100.0;
     config.AIF_IN_FILE   = '.\aif\qiba_aif_5-4_zero_offset.csv';  % ! AIF rise should begin at t = 0.0 in the AIF file !...
                                                                   % ! AIF should be recorded as a blood concentration (not a plasma concentration)

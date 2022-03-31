@@ -82,8 +82,13 @@ function dicom_write_phantom(config, uid, SI, aif_SI, t)
                    error(['Timing field ''' config.TIMING_FIELD ''' not supported!']);
            end
            
-           hd.NumberOfTemporalPositions = config.TIME_PTS;
-  
+           hd.NumberOfTemporalPositions  = config.TIME_PTS;
+           
+           % <added> 08-Mar-2022
+           hd.TemporalPositionIdentifier = i;
+           hd.TemporalResolution         = config.DT;
+           % <end>
+           
            I = im(:,:,i);
            
            hd.SmallestImagePixelValue = min(uint16(I(:)));

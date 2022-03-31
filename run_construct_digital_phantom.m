@@ -2,9 +2,9 @@
 
     SCRIPT TO CONSTRUCT A DIGITAL REFERENCE OBJECT FOR TESTING DCE-MRI ANALYSIS CODE
 
-    Date   : 02-Nov-2021
+    Date   : 31-Mar-2022
     Author : A. B. Gill, PhD  [Radiology, University of Cambridge, UK]
-    Version: 1.01
+    Version: 2.00
 
     [Written and tested under MATLAB R2019b]
 
@@ -23,23 +23,31 @@ function run_construct_digital_phantom()
   
     % -- START SET-UP -----------------------------------------------------
 
-    config.STUDY          = 'EXAMPLES';  % Generic name for study/project...
-    
-    config.TEST_FLAG      = true;   % Gives more debug information if set...
+    % Generic name for study/project...
+    config.STUDY          = 'EXAMPLES';  
 
-    config.WRITE_OUTPUT   = true;   % Disable any writing of files if this is set 'false'...
-   
-    % Paths to writing location | input location, respectively...
+    % Kinetic model to be used...
+    config.MODEL          = '2CXM';    %  TM | eTM | TU | 2CXM | PLK (Patlak) | ...
+
+    % A description string for the phantom...
+    config.PHANTOM_DESC   = 'examp_001';
+      
+    % ---------------------------------------------------------------------
+    
+    config.TEST_FLAG      = false;   % Gives more debug information if set...
+
+    config.WRITE_OUTPUT   = true;    % Disable any writing of files if this is set 'false'...
+  
+    % ---------------------------------------------------------------------
+     
+    % Paths to writing location | working location, respectively...
 
     config.BASE_PATH  = '.\output';
     config.WORK_PATH  = '.\work';
 
-    % Name your phantom: suggest 'model + an ID'...
-    config.PHANTOM_ID     = 'TM_examp_001_01';
+    % Name of phantom...
+    config.PHANTOM_ID = [config.MODEL '_' config.PHANTOM_DESC];
   
-    % Kinetic model to be used...
-    config.MODEL          = 'TM';    %  TM | eTM | TU | 2CXM | PLK (Patlak) | ...
-
     % ...and check: 'phantom_config_all_<STUDY>.m'   
     
                 % This specifies general study configuration parameters...
@@ -49,7 +57,7 @@ function run_construct_digital_phantom()
     % ...and write: 'phantom_config_<PHANTOM_ID>.m'  
     
                 % This specifies phantom-specific configuration parameters...
-                % (see e.g. '.\config\phantom_config_TM_examp_001_01.m' as 
+                % (see e.g. '.\config\phantom_config_eTM_examp_001.m' as 
                 % an example)
 
     % ...and write: 'model_apply_<MODEL>.m'       
@@ -57,10 +65,10 @@ function run_construct_digital_phantom()
                 % ... if not already written...
                 
                 % This specifies how to apply the model, in residue function format...
-                % (see e.g. 'model_apply_TM.m' as an example)
+                % (see e.g. 'model_apply_eTM.m' as an example)
                 
                 % N.B. If adding a new model implementation, also add relevant code
-                % to the switch statements on line 216 of 'run_construct_digital_phantom.m'
+                % to the switch statements on line 223 of 'run_construct_digital_phantom.m'
                 % and on line 16 of 'dce_calc_gd_curves_from_model.m'.
 
     % Two further comma-separated variable 'spreadsheet' files must be
@@ -77,7 +85,7 @@ function run_construct_digital_phantom()
     
                               % An input file of kinetic model parameter values 
                               % to be used in phantom generation...
-                              % (see e.g. '.\config\param_values_TM_examp_01.csv' 
+                              % (see e.g. '.\config\param_values_eTM_examp_001.csv' 
                               % as an example)
                               
     % -- END SET-UP -------------------------------------------------------
@@ -218,9 +226,9 @@ function run_construct_digital_phantom()
             % Assign kinetic model input parameter values...
             switch config.MODEL
                 case 'TM'
-                    k(:,v) = [config.KTRANS(v, this_slice), config.VE(v, this_slice)]; %#ok<AGROW>
+                    k(:,v) = [config.KTRANS(v, this_slice), config.VE(v, this_slice), config.KEP(v, this_slice)]; %#ok<AGROW>
                 case 'eTM'
-                    k(:,v) = [config.KTRANS(v, this_slice), config.VE(v, this_slice), config.VP(v, this_slice)]; %#ok<AGROW>
+                    k(:,v) = [config.KTRANS(v, this_slice), config.VE(v, this_slice), config.VP(v, this_slice), config.KEP(v, this_slice)]; %#ok<AGROW>
                 case 'TU'
                     k(:,v) = [config.KTRANS(v, this_slice), config.PS(v, this_slice), config.VP(v, this_slice), config.FP(v, this_slice), config.TP(v, this_slice)]; %#ok<AGROW>
                 case '2CXM'

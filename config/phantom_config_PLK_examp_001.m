@@ -1,10 +1,14 @@
 
 
 
-function config = phantom_config_PLK_examp_001_01(config)
+function config = phantom_config_PLK_examp_001(config)
 
     % Kinetic variables to be reported from model...
-    config.KIN_VARS      = {'ktrans','vp'};
+    config.VARIABLES     = {'ktrans','vp'};
+    config.EXTRA_MAPS    = {};
+    
+    % Lump these together...
+    config.KIN_VARS      = cat(2, config.VARIABLES, config.EXTRA_MAPS);
 
     % Number of kinetic variables...
     config.NUM_PARAMS    = length(config.KIN_VARS);
@@ -16,7 +20,7 @@ function config = phantom_config_PLK_examp_001_01(config)
 
     % The file containing the input kinetic variable values and B1, T10
     % values...
-    config.PARAM_IN_FILE = '.\config\param_values_PLK_examp_01.csv';
+    config.PARAM_IN_FILE = '.\config\param_values_PLK_examp_001.csv';
 
     config.NUM_BLOCKS    = config.NUM_ROWS * config.NUM_COLS;
 
@@ -24,7 +28,7 @@ function config = phantom_config_PLK_examp_001_01(config)
     config.KTRANS        = config_read_parameter_values(config.KIN_VARS{1}, config.PARAM_IN_FILE, config); 
     config.VP            = config_read_parameter_values(config.KIN_VARS{2}, config.PARAM_IN_FILE, config); 
 
-    % Scale factors for output maps [ktrans, ve, vp]...
+    % Scale factors for output maps [ktrans, vp]...
     config.MAP_SF        = [1000.0, 10000.0];
 
     % Units of variables...
